@@ -1,0 +1,55 @@
+﻿@model detailsemployeedto
+@{
+    ViewData["Title"] = "details";
+	var depts= ViewBag.departments = new SelectList(ViewData["departments"] as IEnumerable<department>, "id", "name");
+}
+
+<h1>details</h1>
+
+<br></br>
+<div class=" m-4">
+    <label asp-for="name">name</label>
+    <input type="text" class="form-control" asp-for="name" readonly></input>
+    
+</div>
+<div class=" m-4">
+    <label asp-for="age">age</label>
+    <input class="form-control" type="number" asp-for="age" readonly></input>
+    
+</div>
+
+<div class=" m-4">
+    <label asp-for="email">email</label>
+    <input type="email" class="form-control" asp-for="email" readonly></input>
+    
+</div>
+
+<div class=" m-4">
+    <label asp-for="salary">salary</label>
+    <input class="form-rang" asp-for="salary" readonly></input>
+   
+</div>
+
+<div class=" m-4">
+    <label asp-for="isactive">isactive</label>
+    <input type="checkbox" asp-for="isactive" disabled></input>
+
+</div>
+
+<div class=" m-4">
+    <label asp-for="isdeleted">isdeleted</label>
+    <input type="checkbox" asp-for="isdeleted" disabled></input>
+    
+</div>
+
+<div class=" m-4">
+    <label asp-for="hiringdate">hiringdate</label>
+    <input class="form-control" type="date" asp-for="hiringdate" readonly></input>
+    
+</div>
+<div class=" m-4">
+	<label asp-for="departmentid">department</label>
+	<select asp-items="depts" asp-for="departmentid" disabled class="form-control" > </select> </div>
+<a class=" btn btn-warning" asp-action="edit" asp-route-id="@Model.id"> Edit</a>
+<a class=" btn btn-light" asp-action="index"> back to home</a>
+

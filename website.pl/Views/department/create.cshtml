@@ -1,0 +1,31 @@
+﻿@using website.pl.dtos
+@model createdto
+@{
+    ViewData["Title"] = "create";
+}
+
+<h1>create department</h1>
+<br></br>
+<form asp-action="create">
+<div class="my-4">
+    <label asp-for="code">code</label>
+    <input asp-for="code " class="form-control"></input>
+        <span asp-validation-for="code" class="text-danger"></span>
+
+</div>
+<div>
+    <label asp-for="name">name</label>
+    <input asp-for="name " class="form-control"></input>
+        <span asp-validation-for="name" class="text-danger"></span>
+</div>
+<div>
+    <label asp-for="createat">name</label>
+    <input asp-for="createat " class="form-control"></input>
+        <span asp-validation-for="createat" class="text-danger"></span>
+</div>
+
+    <input type="submit" value="Create" class="btn btn-primary" />
+</form>
+
+
+

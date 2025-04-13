@@ -1,0 +1,27 @@
+﻿@model signupdto
+@{
+    ViewData["Title"] = "Signup";
+    Layout = "~/Views/Shared/accountlayout.cshtml";
+}
+
+<h1>Signup</h1>
+<form action="Signup" method="post">
+	<input class="text" asp-for="firstname" placeholder="firstname" required="">
+	<input class="text" asp-for="lastname" placeholder="lastname" required="">
+	<input class="text" asp-for="username" placeholder="Username" required="">
+	<input class="text email" asp-for="email" placeholder="Email" required="">
+	<input class="text" asp-for="password" placeholder="Password" required="">
+	<input class="text w3lpass" asp-for="confirmpassword" placeholder="Confirm Password" required="">
+	<div class="wthree-text">
+		<label class="anim">
+			<input asp-for="isagree" class="checkbox" required="">
+			<span>I Agree To The Terms & Conditions</span>
+		</label>
+		<div class="clear"> </div>
+	</div>
+	<input type="submit" value="SIGNUP">
+</form>
+<p>Do you have an Account? <a asp-action="login"> Login Now!</a></p>
+			</div>
+		</div>
+

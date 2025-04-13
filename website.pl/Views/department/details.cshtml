@@ -1,0 +1,31 @@
+﻿@model detailsdto
+
+
+@{
+    ViewData["Title"] = "details";
+}
+
+<h1>details</h1>
+<br></br>
+<div class="my-4">
+    <label asp-for="code">code</label>
+    <input asp-for="code " class="form-control" readonly></input>
+    <span asp-validation-for="code" class="text-danger"></span>
+
+</div>
+<div class="my-4">
+    <label asp-for="name">name</label>
+    <input asp-for="name " class="form-control" readonly></input>
+    <span asp-validation-for="name" class="text-danger"></span>
+</div>
+<div class="my-4 ">
+    <label asp-for="id">id</label>
+    <input asp-for="id " class="form-control" readonly></input>
+    <span asp-validation-for="id" class="text-danger"></span>
+</div>
+
+<a asp-route-id="@Model.id" asp-action="update" class=" btn btn-warning">edit</a>
+<a asp-route-id="@Model.id" asp-action="employees" class=" btn btn-success">show employees</a>
+<a  asp-action="index" class="  btn btn-light">back to list </a>
+
+

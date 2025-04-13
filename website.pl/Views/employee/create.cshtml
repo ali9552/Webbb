@@ -1,0 +1,57 @@
+﻿@model createemployee
+
+@{
+    var depts = new SelectList(ViewData["departments"] as IEnumerable<department>, "id", "name");
+   
+}
+<form asp-action="create" enctype="multipart/form-data" >
+<h1>add employee</h1>
+<div class=" m-4">
+<label asp-for="name">name</label>
+    <input type="text" class="form-control" asp-for="name"></input>
+        <span asp-validation-for="name" class="text-danger"></span>
+</div>
+<div class=" m-4">
+<label asp-for="age">age</label>
+    <input class="form-control" type="number" asp-for="age"></input>
+        <span asp-validation-for="age" class="text-danger"></span>
+</div>
+
+<div class=" m-4">
+<label asp-for="email">email</label>
+    <input type="email" class="form-control"  asp-for="email"></input>
+        <span asp-validation-for="email" class="text-danger"></span>
+</div>
+
+<div class=" m-4">
+<label asp-for="salary">salary</label>
+		<input class="form-rang"  asp-for="salary"></input>
+        <span asp-validation-for="salary" class="text-danger"></span>
+</div>
+
+<div class=" m-4">
+<label asp-for="isactive">isactive</label>
+    <input  type="checkbox" asp-for="isactive"></input>
+        <span asp-validation-for="isactive" class="text-danger"></span>
+</div>
+
+<div class=" m-4">
+<label asp-for="isdeleted">isdeleted</label>
+    <input  type="checkbox" asp-for="isdeleted"></input>
+        <span asp-validation-for="isdeleted" class="text-danger"></span>
+</div>
+
+<div class=" m-4">
+<label asp-for="hiringdate">hiringdate</label>
+    <input class="form-control" type="date" asp-for="hiringdate"></input>
+        <span asp-validation-for="hiringdate" class="text-danger"></span>
+</div>
+    <div class=" m-4"> <select class="form-control" asp-items="depts" asp-for="departmentid"></select>  </div>
+    <div class=" my-3">
+        <label asp-for="image"></label>
+        <input type="file" asp-for="image"></input>
+
+    </div>
+<input type="submit" value="add"></input>
+</form>
+

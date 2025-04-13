@@ -1,0 +1,84 @@
+﻿@model IEnumerable<employee>
+@{
+	ViewData["Title"] = "Index";
+	string? datatemp = TempData["message"] as string;
+}
+
+<h1>Employees</h1>
+
+<a asp-action="create" class="btn btn-success"> add employee </a>
+@if (!string.IsNullOrEmpty(datatemp))
+{
+	<div class="my-4"><p class="alert alert-danger">@datatemp;</p></div>}
+
+<table class="table table-bordered table-hover" > 
+
+	<thead>
+
+		<tr>
+			<th></th>
+			<th>
+				name
+			</th>
+			<th>
+				age
+			</th>
+			<th>salary</th>
+			<th> email</th>
+			<th>department</th>
+			<th>isactive</th>
+			<th>isdeleted</th>
+			<th> hiringdate</th>
+			<th>details</th>
+			<th>edit</th>
+			<th>delete</th>
+
+
+
+
+		</tr>
+
+	</thead>
+	<tbody>
+		@if (Model.Count() > 0)
+		{
+			@foreach (var item in Model)
+			{
+				if(item!=null){
+				<tr>
+					<td>
+						<img class="img-fluid rounded-circle" width="80" height="80" src="~/files/images/@item.imagename"></img>
+					</td>
+					<th>@item.name </th>
+					<th>@item.age </th>
+					<th>@item.salary </th>
+					<th>@item.email </th>
+	                 <th>@item.department?.name</th>
+					<th>@item.isactive </th>
+					<th>@item.isdeleted </th>
+					<th>@item.hiringdate </th>
+					<th><a class=" btn btn-warning" asp-route-id="@item.id" asp-action="details">details</a></th>
+					<th><a class=" btn btn-primary"asp-route-id="@item.id" asp-action="edit" >edit</a></th>
+					<th><a class=" btn btn-danger" asp-route-id="@item.id " asp-action="delete" onclick="return confirm('are u sure u want to delete the employee')">delete</a></th>
+
+
+
+				</tr>
+				}
+			}
+		}
+		else
+		{
+			<div class=" alert-info"> <h4>there is no employees assigned yet</h4></div>
+		}
+
+	</tbody>
+	
+
+</table>
+<form method="get" asp-action="Index">
+	<input oninput="this.form.submit()" type="text" name="email" placeholder="Search by email" class="form-control" />
+	<button  type="submit" class="btn btn-primary">Search</button>
+</form>
+
+					 

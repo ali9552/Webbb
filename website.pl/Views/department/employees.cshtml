@@ -1,0 +1,32 @@
+﻿@model IEnumerable<employee>
+@{
+    ViewData["Title"] = "employees";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>employees of @ViewData["department"] department</h1>
+
+
+<table class="table table-hover table-hover">
+
+    <thead>
+        <th> employee name </th>
+        <th> employee email </th>
+        <th>employee age</th>
+
+
+    </thead>
+    <tbody>
+        @foreach (var employee in Model)
+        {
+            <td>@employee.name</td>
+		<td>@employee.email</td>
+		<td>@employee.age</td>
+		<td>
+            <a asp-controller="employee" asp-action="details" asp-route-id="@employee.id" class="btn btn-dark">details</a> |
+			
+		</td>
+        }
+    </tbody>
+</table>
+

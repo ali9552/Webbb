@@ -1,0 +1,29 @@
+﻿
+@model editdto
+@{
+    ViewData["Title"] = "update";
+}
+
+<h1>update</h1>
+
+<br></br>
+<form asp-action="update">
+    <div class="my-4">
+        <label asp-for="code">code</label>
+        <input asp-for="code " class="form-control"></input>
+        <span asp-validation-for="code" class="text-danger"></span>
+
+    </div>
+    <div>
+        <label asp-for="name">name</label>
+        <input asp-for="name "  class="form-control"></input>
+        <span asp-validation-for="name" class="text-danger"></span>
+    </div>
+    <div>
+        <label asp-for="createat">creation date</label>
+        <input asp-for="createat " class="form-control" ></input>
+        <span asp-validation-for="createat" class="text-danger"></span>
+    </div>
+
+    <input type="submit" value="save" class="btn btn-primary" />
+</form>
