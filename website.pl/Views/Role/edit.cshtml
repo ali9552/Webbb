@@ -1,0 +1,57 @@
+﻿@model roleviewdto
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm border-0 rounded-lg">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="mb-0"><i class="fa fa-edit me-2"></i>Edit Role</h2>
+                </div>
+                <div class="card-body p-4">
+                    <form method="post" class="needs-validation" novalidate>
+                        <div class="row mb-4">
+                            <div class="col-md-12">
+                                <label class="form-label text-muted">Role Name</label>
+                                <input type="text" class="form-control" asp-for="name" placeholder="Enter role name" required />
+                                <span asp-validation-for="name" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between mt-4">
+                            <a asp-action="Index" class="btn btn-outline-secondary">
+                                <i class="fa fa-arrow-left me-1"></i> Back to List
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fa fa-save me-1"></i> Save Changes
+                            </button>
+
+                            <a asp-action="AddOrRemoveUser" asp-route-id="@Model.id" class="btn btn-warning">
+                                <i class="fa fa-users me-1"></i> Manage Users in Role
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Bootstrap 5 client-side validation
+        (() => {
+            'use strict';
+
+            const form = document.querySelector('.needs-validation');
+
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+
+                form.classList.add('was-validated');
+            }, false);
+        })();
+    </script>
+}

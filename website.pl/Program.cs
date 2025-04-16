@@ -52,7 +52,6 @@ namespace website.pl
                 .WithStaticAssets();
             app.UseAuthentication();
             app.UseAuthorization();
-
             app.Run();
         }
     }

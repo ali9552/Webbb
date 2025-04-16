@@ -1,55 +1,109 @@
 ﻿@model detailsemployeedto
 @{
-    ViewData["Title"] = "details";
-	var depts= ViewBag.departments = new SelectList(ViewData["departments"] as IEnumerable<department>, "id", "name");
+    ViewData["Title"] = "Employee Details";
+    var depts = new SelectList(ViewData["departments"] as IEnumerable<department>, "id", "name");
 }
 
-<h1>details</h1>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm border-0 rounded-lg">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h2 class="mb-0"><i class="fa fa-user me-2"></i>Employee Details</h2>
+                    <div>
+                        <a class="btn btn-light btn-sm" asp-action="edit" asp-route-id="@Model.id">
+                            <i class="fa fa-edit me-1"></i> Edit
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row mb-4">
+                        <div class="col-md-3 text-center">
+                            <div class="bg-light rounded-circle d-flex align-items-center justify-content-center" style="width: 150px; height: 150px; margin: 0 auto;">
+                                <i class="fa fa-user fa-4x text-secondary"></i>
+                            </div>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label text-muted"><i class="fa fa-user me-1"></i>Name</label>
+                                        <input type="text" class="form-control" asp-for="name" readonly />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label text-muted"><i class="fa fa-envelope me-1"></i>Email</label>
+                                        <input type="email" class="form-control" asp-for="email" readonly />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label text-muted"><i class="fa fa-building me-1"></i>Department</label>
+                                        <select asp-items="depts" asp-for="departmentid" disabled class="form-select"></select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label text-muted"><i class="fa fa-calendar me-1"></i>Hiring Date</label>
+                                        <input class="form-control" type="date" asp-for="hiringdate" readonly />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-<br></br>
-<div class=" m-4">
-    <label asp-for="name">name</label>
-    <input type="text" class="form-control" asp-for="name" readonly></input>
-    
-</div>
-<div class=" m-4">
-    <label asp-for="age">age</label>
-    <input class="form-control" type="number" asp-for="age" readonly></input>
-    
-</div>
+                    <hr />
 
-<div class=" m-4">
-    <label asp-for="email">email</label>
-    <input type="email" class="form-control" asp-for="email" readonly></input>
-    
-</div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label class="form-label text-muted"><i class="fa fa-calendar-alt me-1"></i>Age</label>
+                                <input class="form-control" type="number" asp-for="age" readonly />
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label class="form-label text-muted"><i class="fa fa-dollar-sign me-1"></i>Salary</label>
+                                <input class="form-control" asp-for="salary" readonly />
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label class="form-label text-muted"><i class="fa fa-id-badge me-1"></i>Employee ID</label>
+                                <input class="form-control" value="@Model.id" readonly />
+                            </div>
+                        </div>
+                    </div>
 
-<div class=" m-4">
-    <label asp-for="salary">salary</label>
-    <input class="form-rang" asp-for="salary" readonly></input>
-   
-</div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" asp-for="isactive" disabled />
+                                <label class="form-check-label" for="isactive"><i class="fa fa-toggle-on me-1"></i>Active Employee</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" asp-for="isdeleted" disabled />
+                                <label class="form-check-label" for="isdeleted"><i class="fa fa-trash-alt me-1"></i>Soft Deleted</label>
+                            </div>
+                        </div>
+                    </div>
 
-<div class=" m-4">
-    <label asp-for="isactive">isactive</label>
-    <input type="checkbox" asp-for="isactive" disabled></input>
-
+                    <div class="d-flex justify-content-between mt-4">
+                        <a asp-action="index" class="btn btn-outline-secondary">
+                            <i class="fa fa-arrow-left me-1"></i> Back to List
+                        </a>
+                        <a class="btn btn-outline-primary" asp-action="edit" asp-route-id="@Model.id">
+                            <i class="fa fa-edit me-1"></i> Edit Employee
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-
-<div class=" m-4">
-    <label asp-for="isdeleted">isdeleted</label>
-    <input type="checkbox" asp-for="isdeleted" disabled></input>
-    
-</div>
-
-<div class=" m-4">
-    <label asp-for="hiringdate">hiringdate</label>
-    <input class="form-control" type="date" asp-for="hiringdate" readonly></input>
-    
-</div>
-<div class=" m-4">
-	<label asp-for="departmentid">department</label>
-	<select asp-items="depts" asp-for="departmentid" disabled class="form-control" > </select> </div>
-<a class=" btn btn-warning" asp-action="edit" asp-route-id="@Model.id"> Edit</a>
-<a class=" btn btn-light" asp-action="index"> back to home</a>
 

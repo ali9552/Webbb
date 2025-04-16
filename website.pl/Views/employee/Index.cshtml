@@ -1,84 +1,182 @@
 ﻿@model IEnumerable<employee>
 @{
-	ViewData["Title"] = "Index";
+	ViewData["Title"] = "Employees";
 	string? datatemp = TempData["message"] as string;
 }
 
-<h1>Employees</h1>
+<div class="container-fluid py-4">
+	<div class="card shadow-sm border-0">
+		<div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+			<h2 class="mb-0"><i class="fa fa-users me-2"></i>Employees</h2>
+			<div>
+				<div class="input-group">
+					<input type="text" id="searchInput" class="form-control" placeholder="Search employees..." aria-label="Search">
+					<button class="btn btn-light" type="button" id="clearSearchBtn">
+						<i class="fa fa-times"></i>
+					</button>
+				</div>
+			</div>
+			<a asp-action="create" class="btn btn-light">
+				<i class="fa fa-plus-circle me-1"></i> Add Employee
+			</a>
+		</div>
 
-<a asp-action="create" class="btn btn-success"> add employee </a>
-@if (!string.IsNullOrEmpty(datatemp))
-{
-	<div class="my-4"><p class="alert alert-danger">@datatemp;</p></div>}
-
-<table class="table table-bordered table-hover" > 
-
-	<thead>
-
-		<tr>
-			<th></th>
-			<th>
-				name
-			</th>
-			<th>
-				age
-			</th>
-			<th>salary</th>
-			<th> email</th>
-			<th>department</th>
-			<th>isactive</th>
-			<th>isdeleted</th>
-			<th> hiringdate</th>
-			<th>details</th>
-			<th>edit</th>
-			<th>delete</th>
-
-
-
-
-		</tr>
-
-	</thead>
-	<tbody>
-		@if (Model.Count() > 0)
-		{
-			@foreach (var item in Model)
+		<div class="card-body p-0">
+			@if (!string.IsNullOrEmpty(datatemp))
 			{
-				if(item!=null){
-				<tr>
-					<td>
-						<img class="img-fluid rounded-circle" width="80" height="80" src="~/files/images/@item.imagename"></img>
-					</td>
-					<th>@item.name </th>
-					<th>@item.age </th>
-					<th>@item.salary </th>
-					<th>@item.email </th>
-	                 <th>@item.department?.name</th>
-					<th>@item.isactive </th>
-					<th>@item.isdeleted </th>
-					<th>@item.hiringdate </th>
-					<th><a class=" btn btn-warning" asp-route-id="@item.id" asp-action="details">details</a></th>
-					<th><a class=" btn btn-primary"asp-route-id="@item.id" asp-action="edit" >edit</a></th>
-					<th><a class=" btn btn-danger" asp-route-id="@item.id " asp-action="delete" onclick="return confirm('are u sure u want to delete the employee')">delete</a></th>
-
-
-
-				</tr>
-				}
+				<div class="alert alert-danger m-3 alert-dismissible fade show" role="alert">
+					<i class="fa fa-exclamation-circle me-2"></i> @datatemp
+					<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+				</div>
 			}
+
+			<div class="table-responsive">
+				<table class="table table-hover align-middle mb-0" id="employeesTable">
+					<thead class="table-light">
+						<tr>
+							<th></th>
+							<th>
+								<i class="fa fa-user me-1"></i> Name
+							</th>
+							<th>
+								<i class="fa fa-calendar-alt me-1"></i> Age
+							</th>
+							<th><i class="fa fa-dollar-sign me-1"></i> Salary</th>
+							<th><i class="fa fa-envelope me-1"></i> Email</th>
+							<th><i class="fa fa-building me-1"></i> Department</th>
+							<th><i class="fa fa-toggle-on me-1"></i> Status</th>
+							<th><i class="fa fa-calendar me-1"></i> Hiring Date</th>
+							<th class="text-center">Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						@if (Model.Count() > 0)
+						{
+							@foreach (var item in Model)
+							{
+								if (item != null)
+								{
+									<tr class="employee-row">
+										<td>
+											@if (!string.IsNullOrEmpty(item.imagename))
+											{
+												<img class="img-fluid rounded-circle" width="50" height="50" src="~/files/images/@item.imagename" alt="@item.name">
+											}
+											else
+											{
+												<div class="bg-light rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+													<i class="fa fa-user text-secondary"></i>
+												</div>
+											}
+										</td>
+										<td>@item.name</td>
+										<td>@item.age</td>
+										<td>@item.salary.ToString("C")</td>
+										<td>@item.email</td>
+										<td>@item.department?.name</td>
+										<td>
+											@if (item.isactive)
+											{
+												<span class="badge bg-success"><i class="fa fa-check me-1"></i>Active</span>
+											}
+											else
+											{
+												<span class="badge bg-secondary"><i class="fa fa-times me-1"></i>Inactive</span>
+											}
+											@if (item.isdeleted)
+											{
+												<span class="badge bg-danger ms-1"><i class="fa fa-trash me-1"></i>Deleted</span>
+											}
+										</td>
+										<td>@item.hiringdate.ToString("MMM dd, yyyy")</td>
+										<td>
+											<div class="d-flex justify-content-center gap-2">
+												<a asp-route-id="@item.id" asp-action="details" class="btn btn-sm btn-info">
+													<i class="fa fa-info-circle"></i>
+												</a>
+												<a asp-route-id="@item.id" asp-action="edit" class="btn btn-sm btn-warning">
+													<i class="fa fa-edit"></i>
+												</a>
+												<a href="javascript:void(0);" onclick="confirmDelete('@item.id', '@item.name')" class="btn btn-sm btn-danger">
+													<i class="fa fa-trash"></i>
+												</a>
+											</div>
+										</td>
+									</tr>
+								}
+							}
+						}
+					</tbody>
+				</table>
+			</div>
+
+			@if (Model.Count() == 0)
+			{
+				<div class="alert alert-info m-3 text-center">
+					<i class="fa fa-info-circle me-2"></i> No employees found. Click "Add Employee" to create one.
+				</div>
+			}
+		</div>
+	</div>
+</div>
+
+
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header bg-danger text-white">
+				<h5 class="modal-title" id="deleteModalLabel"><i class="fa fa-trash me-2"></i>Confirm Delete</h5>
+				<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<p>Are you sure you want to delete the employee "<span id="employeeName"></span>"?</p>
+				<p class="text-danger"><i class="fa fa-exclamation-triangle me-1"></i>This action cannot be undone.</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+				<a href="#" id="confirmDeleteBtn" class="btn btn-danger">Delete</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+@section Scripts {
+	<script>
+
+		function confirmDelete(id, name) {
+			document.getElementById('employeeName').textContent = name;
+			document.getElementById('confirmDeleteBtn').href = '@Url.Action("delete")?id=' + id;
+
+			const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+			deleteModal.show();
 		}
-		else
-		{
-			<div class=" alert-info"> <h4>there is no employees assigned yet</h4></div>
-		}
 
-	</tbody>
-	
 
-</table>
-<form method="get" asp-action="Index">
-	<input oninput="this.form.submit()" type="text" name="email" placeholder="Search by email" class="form-control" />
-	<button  type="submit" class="btn btn-primary">Search</button>
-</form>
+		document.addEventListener('DOMContentLoaded', function() {
+			const searchInput = document.getElementById('searchInput');
+			const clearSearchBtn = document.getElementById('clearSearchBtn');
+			const rows = document.querySelectorAll('.employee-row');
 
-					 
+			searchInput.addEventListener('input', function() {
+				const searchTerm = this.value.toLowerCase().trim();
+
+				rows.forEach(row => {
+					const text = row.textContent.toLowerCase();
+					if (searchTerm === '' || text.includes(searchTerm)) {
+						row.style.display = '';
+					} else {
+						row.style.display = 'none';
+					}
+				});
+			});
+
+			clearSearchBtn.addEventListener('click', function() {
+				searchInput.value = '';
+				rows.forEach(row => {
+					row.style.display = '';
+				});
+			});
+		});
+	</script>
+}
+

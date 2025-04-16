@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Net.Mail;
+using System.Text;
 
 namespace website.pl.helpers
 {
@@ -16,13 +17,25 @@ namespace website.pl.helpers
                     
 
 
-                return true; // Return true if the email was sent successfully
+                return true; 
             }
             catch (Exception e)
             {
-                // Handle exceptions (e.g., log the error)
-                return false; // Return false if there was an error
+                
+                return false; 
             }
+        }
+        public static string GenerateOTP(int length = 6)
+        {
+            var rng = new Random();
+            var otp = new StringBuilder();
+
+            for (int i = 0; i < length; i++)
+            {
+                otp.Append(rng.Next(0, 10)); 
+            }
+
+            return otp.ToString();
         }
 
 

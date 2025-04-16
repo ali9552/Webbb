@@ -63,8 +63,12 @@ namespace website.pl.Controllers
 
                 if (result.Succeeded)
                 {
-                    // You can add additional logic here, such as signing in the user or redirecting to a different page
-                    return RedirectToAction("login");
+                    TempData["SuccessMessage"] = "you just have to verify your account! ";
+                    
+                    return RedirectToAction("sendotporlink");
+
+
+
                 }
                 else
                 {
@@ -76,9 +80,91 @@ namespace website.pl.Controllers
 
 
             }
-            return BadRequest("Invalid signup attempt.");
+            return View(signupdto);
 
         }
+        [HttpGet]
+        public IActionResult sendotporlink()
+        {
+
+            return View();
+
+
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> sendotporlink(string? email)
+        {
+            
+            if(ModelState.IsValid)
+            {
+
+                var user = await _userManager.FindByEmailAsync(email);
+                if(user is not null)
+                {
+                  
+                    var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    var url = Url.Action("verifyemailurl", "Account", new { email = email, token = token }, Request.Scheme);
+                    var res= emailsetting.sendemail(new email() { to = email, subject = "verify your account", body = $"click here to verifay your account {url}" });
+                    if (res) {
+                        TempData["Message"] = "Verification link has been sent to your email.";
+                        return RedirectToAction("login"); }
+                    else
+                    {
+                        ModelState.AddModelError("", "Email not sent.");
+                        return View(email);
+                    }
+
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Email not found.");
+                    return View(email);
+                }
+
+
+
+
+            }
+            
+            return View();
+
+
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> verifyemailurl(string? email,string? token)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+
+            if (user is not null)
+            {
+
+                var result = await _userManager.ConfirmEmailAsync(user, token);
+                if (result.Succeeded)
+                {
+                    TempData["message"] = "Email verified successfully.";
+                    return RedirectToAction("login", "Account");
+                }
+                else
+                {
+                    TempData["message"]="Invalid token.";
+                    return RedirectToAction("login", "Account");
+                }
+            }
+            else
+            {
+                TempData["message"] = "email not found.";
+                return RedirectToAction("login", "Account");
+
+            }
+
+
+         
+
+        }
+       
+
         [HttpGet]
         public async Task<IActionResult> Login()
         {
@@ -98,6 +184,12 @@ namespace website.pl.Controllers
                 }
                 if (user is not null)
                 {
+                    if (user.EmailConfirmed == false)
+                    {
+                        ModelState.AddModelError("", "Email not verified.");
+                        ViewData["nover"] = "Email not verified.";
+                        return View(logindto);
+                    }
 
                     var result1 = await _userManager.CheckPasswordAsync(user, logindto.password);
                     if (result1)
@@ -119,7 +211,7 @@ namespace website.pl.Controllers
                 }
 
             }
-            return BadRequest("Invalid login attempt.");
+            return View(logindto);
         }
 
         public new async Task<IActionResult> signout()
@@ -128,6 +220,7 @@ namespace website.pl.Controllers
             await _signInManager.SignOutAsync();
             return RedirectToAction("login", "Account");
         }
+
         public IActionResult forgetpassword()
         {
 
@@ -154,7 +247,7 @@ namespace website.pl.Controllers
 
                 }
                 ModelState.AddModelError("", "Email not found.");
-                return View(model);
+                return View("forgetpassword",model);
             }
 
 

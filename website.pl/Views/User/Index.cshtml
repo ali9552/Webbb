@@ -1,0 +1,152 @@
+﻿@model IEnumerable<userdto>
+@{
+    ViewData["Title"] = "Users";
+    string? datatemp = TempData["message"] as string;
+}
+
+<div class="container-fluid py-4">
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h2 class="mb-0"><i class="fa fa-users me-2"></i>Users</h2>
+            <div class="d-flex gap-2">
+                <input type="text" id="searchInput" class="form-control" placeholder="Search by username..." />
+                <button type="button" id="clearSearchBtn" class="btn btn-light" title="Clear Search">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="card-body p-0">
+            @if (!string.IsNullOrEmpty(datatemp))
+            {
+                <div class="alert alert-danger m-3 alert-dismissible fade show" role="alert">
+                    <i class="fa fa-exclamation-circle me-2"></i> @datatemp
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+
+            @if (Model.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0" id="userstable">
+                        <thead class="table-light">
+                            <tr>
+                                <th></th>
+                                <th>Username</th>
+                                <th>Email</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Roles</th>
+                                <th class="text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr class="user-row">
+                                    <td></td>
+                                    <td>@item.username</td>
+                                    <td>@item.email</td>
+                                    <td>@item.fname</td>
+                                    <td>@item.lname</td>
+                                    <td>
+                                        @if (item.roles != null && item.roles.Any())
+                                        {
+                                            foreach (var role in item.roles)
+                                            {
+                                                <span class="badge bg-secondary me-1">@role</span>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <span>No roles</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <div class="d-flex justify-content-center gap-2">
+                                            <a asp-action="Details" asp-route-id="@item.id" class="btn btn-sm btn-info" title="Details">
+                                                <i class="fa fa-info-circle"></i>
+                                            </a>
+                                            <a asp-action="Edit" asp-route-id="@item.id" class="btn btn-sm btn-warning" title="Edit">
+                                                <i class="fa fa-edit"></i>
+                                            </a>
+                                            <a href="javascript:void(0);" onclick="confirmDelete('@item.id', '@item.username')" class="btn btn-sm btn-danger" title="Delete">
+                                                <i class="fa fa-trash"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-info m-3 text-center">
+                    <i class="fa fa-info-circle me-2"></i> No users found.
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="deleteModalLabel"><i class="fa fa-trash me-2"></i> Confirm Delete</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete user <strong id="employeeName"></strong>?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <a href="#" id="confirmDeleteBtn" class="btn btn-danger">Delete</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Confirm Delete
+        function confirmDelete(id, name) {
+            document.getElementById('employeeName').textContent = name;
+            document.getElementById('confirmDeleteBtn').href = '@Url.Action("Delete")' + '?id=' + id;
+
+            const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+            deleteModal.show();
+        }
+
+        // Real-Time Search Filter
+        document.addEventListener('DOMContentLoaded', function () {
+            const searchInput = document.getElementById('searchInput');
+            const clearSearchBtn = document.getElementById('clearSearchBtn');
+
+            function filterTable() {
+                const searchTerm = searchInput.value.toLowerCase().trim();
+                const rows = document.querySelectorAll('.user-row');
+
+                rows.forEach(row => {
+                    const rowText = row.textContent.toLowerCase();
+                    row.style.display = rowText.includes(searchTerm) ? '' : 'none';
+                });
+            }
+
+            searchInput.addEventListener('input', filterTable);
+
+            clearSearchBtn.addEventListener('click', function () {
+                searchInput.value = '';
+                filterTable();
+            });
+
+            // Trigger filtering if input has value (e.g. autofill or refresh)
+            if (searchInput.value.trim() !== '') {
+                filterTable();
+            }
+        });
+    </script>
+}

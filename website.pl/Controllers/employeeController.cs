@@ -102,7 +102,7 @@ namespace website.pl.Controllers
                 return NotFound();
             }
 
-            var editdto = _mapper.Map<editdtoemployee>(employee); // 🔧 Use AutoMapper to map properties
+            var editdto = _mapper.Map<editdtoemployee>(employee); 
 
             var departments = await _unitofwork.departmentrepo.getall();
             ViewData["departments"] = departments;
@@ -126,29 +126,32 @@ namespace website.pl.Controllers
                 {
                     return NotFound();
                 }
-                if (edto.imagename is not null&&edto.image is not null)
+
+                
+                if (!string.IsNullOrEmpty(edto.email))
+                {
+                    var existingEmployee = await _unitofwork.employeerepo.getbyemail(edto.email);
+                    if (existingEmployee != null && existingEmployee.id != id.Value)
+                    {
+                        ViewData["departments"] = await _unitofwork.departmentrepo.getall();
+
+                        ModelState.AddModelError("Email", "Email is already in use by another employee.");
+                        return View(edto);
+                    }
+                }
+
+                if (edto.imagename is not null && edto.image is not null)
                 {
                     documentsetting.delete(employee.imagename, "images");
-                   
                 }
+
                 if (edto.image is not null)
                 {
                     edto.imagename = documentsetting.uploadpath(edto.image, "images");
                 }
 
-                // Check if another employee already has the same email
-                var existingEmployee = await _unitofwork.employeerepo.getbyemail(edto.email);
-                if (existingEmployee != null && existingEmployee.id != id.Value)
-                {
-                    ViewData["departments"] = _unitofwork.departmentrepo.getall();
-                    ModelState.AddModelError("Email", "Email is already in use by another employee.");
-                    return View(edto);
-                }
-
-                // Update the employee (dont use _mapper.Map<employee>(edto); bc this will create a new instance of employee)
-                _mapper.Map(edto, employee); //Takes an existing employee object (usually one already tracked by EF) and update it with edto
-
-                 _unitofwork.employeerepo.update(employee);
+                _mapper.Map(edto, employee);
+                _unitofwork.employeerepo.update(employee);
                 var count = await _unitofwork.complete();
 
                 if (count > 0)
@@ -156,9 +159,11 @@ namespace website.pl.Controllers
                     return RedirectToAction("Index");
                 }
             }
-            ViewData["departments"] = _unitofwork.departmentrepo.getall();
+
+            ViewData["departments"] = await _unitofwork.departmentrepo.getall();
             return View(edto);
         }
+
 
         public async Task<IActionResult> details(int? id)
         {

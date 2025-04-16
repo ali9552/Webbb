@@ -1,28 +1,108 @@
 ﻿@model logindto
 @{
-    ViewData["Title"] = "Login";
-	var messge = TempData["message"];
+    var message = TempData["message"];
+    var notveri = ViewData["nover"];
+    var successMessage = TempData["SuccessMessage"] as string;
     Layout = "~/Views/Shared/accountlayout.cshtml";
 }
 
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow border-0 rounded-4">
+                <div class="card-body p-5">
+                    <div class="text-center mb-4">
+                        <h2 class="fw-bold text-primary">Login</h2>
+                        @if (message != null)
+                        {
+                            <div class="alert alert-info mt-3">@message</div>
+                        }
+                    </div>
 
+                    @Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })
 
-<h1>Login</h1>
-<h2 class="alert-primary "> @messge</h2>
+                    @if (notveri != null)
+                    {
+                        <div class="alert alert-warning text-center mb-4">
+                            Please verify your account.
+                            <a asp-action="sendotporlink" class="btn btn-sm btn-outline-primary ms-2">Verify Now</a>
+                        </div>
+                    }
 
+                    <form asp-action="login" method="post" class="needs-validation" novalidate>
+                        <div class="form-floating mb-4">
+                            <input type="text" class="form-control rounded-3" id="emailorusername" asp-for="emailorusername" placeholder="Email or Username" required />
+                            <label for="emailorusername">Email or Username</label>
+                            <span asp-validation-for="emailorusername" class="text-danger small"></span>
+                            <div class="invalid-feedback">Email or username is required.</div>
+                        </div>
 
-<form action="login" method="post">
+                        <div class="form-floating mb-4">
+                            <input type="password" class="form-control rounded-3" id="password" asp-for="password" placeholder="Password" required />
+                            <label for="password">Password</label>
+                            <span asp-validation-for="password" class="text-danger small"></span>
+                            <div class="invalid-feedback">Password is required.</div>
+                        </div>
 
-	@Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })
-	<input class="text email" asp-for="emailorusername" placeholder="Email or UserName" required=""> <br></br>
-	<input class="text" asp-for="password" placeholder="Password" required="">
-	
-	
-	<input type="submit" value="Login">
-</form>
-<p>Don't have an Account? <a asp-action="signup"> signup Now!</a></p>
-<p> <a asp-action="forgetpassword"> Forget Password!</a></p>
+                        <div class="d-grid mb-3">
+                            <button type="submit" class="btn btn-primary btn-lg rounded-pill">Login</button>
+                        </div>
 
+                        <div class="text-center">
+                            <p class="mb-2">
+                                Don't have an account?
+                                <a asp-action="signup" class="text-decoration-none fw-semibold">Sign up now!</a>
+                            </p>
+                            <p>
+                                <a asp-action="forgetpassword" class="text-decoration-none text-muted">Forgot Password?</a>
+                            </p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
+<!-- Success Toast -->
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1055">
+    <div id="successToast" class="toast text-white bg-success border-0 rounded shadow-sm" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex align-items-center">
+            <div class="toast-body">
+                <i class="bi bi-check-circle-fill me-2"></i>
+                <span id="toastMessage">Account created successfully!</span>
+            </div>
+            <button type="button" class="btn-close btn-close-white ms-2 me-3 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+</div>
 
+@section Scripts {
+    <script>
+        // Bootstrap toast success message
+        document.addEventListener('DOMContentLoaded', function () {
+            var successMessage = '@successMessage';
+            if (successMessage && successMessage.length > 0) {
+                var toastEl = document.getElementById('successToast');
+                var toast = new bootstrap.Toast(toastEl, { delay: 5000 });
+                document.getElementById('toastMessage').textContent = successMessage;
+                toast.show();
+            }
+        });
 
+        // Front-end validation
+        (() => {
+            'use strict';
+            const forms = document.querySelectorAll('.needs-validation');
+            Array.from(forms).forEach(form => {
+                form.addEventListener('submit', event => {
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        })();
+    </script>
+}

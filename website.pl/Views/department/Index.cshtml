@@ -1,72 +1,113 @@
-﻿
-
-@model IEnumerable<department>
+﻿@model IEnumerable<department>
 
 @{
-
-    ViewData["Title"] = "Index";
-
-    
+    ViewData["Title"] = "Departments";
 }
 
-<h1>Department</h1>
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-10 offset-md-1">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h3 class="mb-0">Departments</h3>
+                    <a class="btn btn-light" asp-action="create">
+                        <i class="bi bi-plus-circle"></i> Create New
+                    </a>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover table-striped">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>@Html.DisplayNameFor(D => D.code)</th>
+                                    <th>@Html.DisplayNameFor(D => D.name)</th>
+                                    <th>@Html.DisplayNameFor(D => D.createat)</th>
+                                    <th class="text-center">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.Any())
+                                {
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>@item.code</td>
+                                            <td>@item.name</td>
+                                            <td>@item.createat</td>
+                                            <td>
+                                                <div class="d-flex justify-content-center gap-2">
+                                                    <a asp-action="details" asp-route-id="@item.id" class="text-info">
+                                                        <i class="fa-solid fa-circle-info"></i>
+                                                    </a>
+                                                    <a asp-action="update" asp-route-id="@item.id" class="text-warning">
+                                                        <i class="fa-solid fa-pen-to-square"></i>
+                                                    </a>
+                                                    <button type="button" class="text-danger delete-btn border-0 bg-transparent"
+                                                            data-id="@item.id" data-name="@item.name">
+                                                        <i class="fa-solid fa-trash"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
 
-<a class="btn btn-dark" asp-action="create">create</a>
+                    @if (!Model.Any())
+                    {
+                        <div class="alert alert-info text-center mt-3">
+                            No departments found. Click "Create New" to add a department.
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-<table class="table table-bordered table-hover">
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete the department "<span id="departmentName"></span>"?</p>
+                <p class="text-danger">This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <a href="#" id="confirmDeleteBtn" class="btn btn-danger">Delete</a>
+            </div>
+        </div>
+    </div>
+</div>
 
-    <thead>
-        <tr>
-            <th>@Html.DisplayNameFor(D => D.code)</th>
-            <th>@Html.DisplayNameFor(D => D.name)</th>
-            <th>@Html.DisplayNameFor(D => D.createat)</th>
-            <th>Details</th>
-            <th>Update</th>
-            <th>Delete</th>
-        </tr>
-    </thead>
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Handle delete confirmation
+            const deleteButtons = document.querySelectorAll('.delete-btn');
+            const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+            const departmentNameSpan = document.getElementById('departmentName');
+            const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
 
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const id = this.getAttribute('data-id');
+                    const name = this.getAttribute('data-name');
 
-    <tbody>
-        @if(Model.Count()>0)
-            {
-        
+                    departmentNameSpan.textContent = name;
+                    confirmDeleteBtn.href = '@Url.Action("delete")?id=' + id;
 
-            @foreach (var item in Model)
-            {
-                <tr>
-                <td>
-                    @item.code
-
-                </td>
-                    <td>
-                        @item.name
-
-                    </td>
-                    <td>
-                        @item.createat
-
-                    </td>
-
-                    <td><a asp-action="details" asp-route-id="@item.id" class="btn btn-dark">details</a></td>
-                    <td><a asp-action="update" asp-route-id="@item.id" class="btn btn-warning">update</a></td>
-                    <td><a asp-action="delete" asp-route-id="@item.id" class="btn btn-danger">delete</a></td>
-                </tr>
-            }
-            
-
-           
-        }
-        else
-        {
-            <div> <h4>there is no department</h4>  </div>
-        }
-
-
-    </tbody>
-
-
-
-
-</table>
+                    deleteModal.show();
+                });
+            });
+        });
+    </script>
+}
 

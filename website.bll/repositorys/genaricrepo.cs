@@ -28,7 +28,20 @@ namespace website.bll.repositorys
 
         public void delete(t model)
         {
-            _context.Set<t>().Remove(model);
+            if (typeof(t)==typeof(department))
+            {
+                var employees = _context.employees.Where(e => e.departmentid == model.id).ToList();
+                foreach (var employee in employees)
+                {
+                    employee.isdeleted = true;
+                    employee.isactive = false;
+                    employee.departmentid = null;
+                    _context.employees.Update(employee);
+                }
+            }
+           
+
+                _context.Set<t>().Remove(model);
         }
 
         public async Task<t> Get(int id)

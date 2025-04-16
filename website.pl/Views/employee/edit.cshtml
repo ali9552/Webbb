@@ -1,69 +1,121 @@
-﻿
-
-@model editdtoemployee
+﻿@model editdtoemployee
 @{
-    ViewData["Title"] = "edit";
+    ViewData["Title"] = "Edit Employee";
     var depts = new SelectList(ViewData["departments"] as IEnumerable<department>, "id", "name");
 }
 
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm border-0 rounded-lg">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="mb-0"><i class="fa fa-edit me-2"></i>Edit Employee</h2>
+                </div>
+                <div class="card-body p-4">
+                    @Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })
 
-<h1>update employee</h1>
+                    <form asp-action="edit" enctype="multipart/form-data" class="needs-validation" novalidate>
+                        <input asp-for="imagename" hidden />
 
-<br></br>
-<form asp-action="edit" enctype="multipart/form-data" >
-   
-   
-    <div class=" m-4">
-        <label asp-for="name">name</label>
-        <input type="text" class="form-control" asp-for="name"></input>
-        <span asp-validation-for="name" class="text-danger"></span>
-    </div>
-    <div class=" m-4">
-        <label asp-for="age">age</label>
-        <input class="form-control" type="number" asp-for="age"></input>
-        <span asp-validation-for="age" class="text-danger"></span>
-    </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="name" asp-for="name" placeholder="Name" required />
+                                    <label for="name"><i class="fa fa-user me-1"></i>Name</label>
+                                    <span asp-validation-for="name" class="text-danger"></span>
+                                </div>
+                            </div>
 
-    <div class=" m-4">
-        <label asp-for="email">email</label>
-        <input type="email" class="form-control" asp-for="email"></input>
-        <span asp-validation-for="email" class="text-danger"></span>
-    </div>
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <input type="email" class="form-control" id="email" asp-for="email" placeholder="Email" required />
+                                    <label for="email"><i class="fa fa-envelope me-1"></i>Email</label>
+                                    <span asp-validation-for="email" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
 
-    <div class=" m-4">
-        <label asp-for="salary">salary</label>
-        <input class="form-rang" asp-for="salary"></input>
-        <span asp-validation-for="salary" class="text-danger"></span>
-    </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-floating mb-3">
+                                    <input type="number" class="form-control" id="age" asp-for="age" placeholder="Age" required />
+                                    <label for="age"><i class="fa fa-calendar-alt me-1"></i>Age</label>
+                                    <span asp-validation-for="age" class="text-danger"></span>
+                                </div>
+                            </div>
 
-    <div class=" m-4">
-        <label asp-for="isactive">isactive</label>
-        <input type="checkbox" asp-for="isactive"></input>
-        <span asp-validation-for="isactive" class="text-danger"></span>
-    </div>
+                            <div class="col-md-4">
+                                <div class="form-floating mb-3">
+                                    <input type="number" class="form-control" id="salary" asp-for="salary" placeholder="Salary" required />
+                                    <label for="salary"><i class="fa fa-dollar-sign me-1"></i>Salary</label>
+                                    <span asp-validation-for="salary" class="text-danger"></span>
+                                </div>
+                            </div>
 
-    <div class=" m-4">
-        <label asp-for="isdeleted">isdeleted</label>
-        <input type="checkbox" asp-for="isdeleted"></input>
-        <span asp-validation-for="isdeleted" class="text-danger"></span>
-    </div>
+                            <div class="col-md-4">
+                                <div class="form-floating mb-3">
+                                    <input type="date" class="form-control" id="hiringdate" asp-for="hiringdate" placeholder="Hiring Date" required />
+                                    <label for="hiringdate"><i class="fa fa-calendar me-1"></i>Hiring Date</label>
+                                    <span asp-validation-for="hiringdate" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
 
-    <div class=" m-4">
-        <label asp-for="hiringdate">hiringdate</label>
-        <input class="form-control" type="date" asp-for="hiringdate"></input>
-        <span asp-validation-for="hiringdate" class="text-danger"></span>
-    </div>
-	<div class=" m-4">
-		<label asp-for="departmentid">department</label>
-		<select class="form-control" asp-items="depts" asp-for="departmentid"></select>
-        <div class=" my-3">
-            <label asp-for="image"></label>
-            <input type="file" asp-for="image"></input>
+                        <div class="form-floating mb-3">
+                            <select class="form-select" id="departmentid" asp-items="depts" asp-for="departmentid" required>
+                                <option value="">Select Department</option>
+                            </select>
+                            <label for="departmentid"><i class="fa fa-building me-1"></i>Department</label>
+                            <span asp-validation-for="departmentid" class="text-danger"></span>
+                        </div>
 
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="isactive" asp-for="isactive" />
+                                    <label class="form-check-label" for="isactive"><i class="fa fa-toggle-on me-1"></i>Active Employee</label>
+                                    <span asp-validation-for="isactive" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="isdeleted" asp-for="isdeleted" />
+                                    <label class="form-check-label" for="isdeleted"><i class="fa fa-trash-alt me-1"></i>Soft Deleted</label>
+                                    <span asp-validation-for="isdeleted" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="image" class="form-label"><i class="fa fa-image me-1"></i>Profile Image</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fa fa-upload"></i></span>
+                                <input type="file" class="form-control" id="image" asp-for="image" />
+                            </div>
+                            <span asp-validation-for="image" class="text-danger"></span>
+                            @if (!string.IsNullOrEmpty(Model.imagename))
+                            {
+                                <div class="mt-2">
+                                    <span class="text-muted"><i class="fa fa-paperclip me-1"></i>Current image: @Model.imagename</span>
+                                </div>
+                            }
+                        </div>
+
+                        <div class="d-flex justify-content-between mt-4">
+                            <a asp-action="index" class="btn btn-outline-secondary">
+                                <i class="fa fa-arrow-left me-1"></i> Back to List
+                            </a>
+                            <button type="submit" class="btn btn-warning">
+                                <i class="fa fa-save me-1"></i> Update Employee
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-        <input  asp-for="imagename" hidden></input>
-    <input type="submit" class="btn btn-warning" value="update" ></input>
-</form>
+    </div>
+</div>
 
 
 

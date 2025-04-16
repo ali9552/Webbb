@@ -1,0 +1,48 @@
+﻿@{
+   
+    Layout = "~/Views/Shared/accountlayout.cshtml";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow-sm border-0 rounded-4">
+                <div class="card-body p-4">
+                    <div class="text-center mb-4">
+                        <h2 class="text-primary">Send Verification Link</h2>
+                        <p class="text-muted">We'll send a verification link to your email</p>
+                    </div>
+
+                    <form asp-action="sendotporlink" method="post" novalidate>
+                        <div class="form-floating mb-3">
+                            <input type="email" name="email" class="form-control" id="email" placeholder="Enter your email" required />
+                            <label for="email">Email address</label>
+                            <div class="invalid-feedback">Please enter a valid email address.</div>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg rounded-pill">
+                                <i class="bi bi-envelope-fill me-2"></i>Send OTP
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Client-side basic validation
+        document.querySelector("form").addEventListener("submit", function (e) {
+            const emailInput = document.getElementById("email");
+            if (!emailInput.checkValidity()) {
+                e.preventDefault();
+                emailInput.classList.add("is-invalid");
+            } else {
+                emailInput.classList.remove("is-invalid");
+            }
+        });
+    </script>
+}

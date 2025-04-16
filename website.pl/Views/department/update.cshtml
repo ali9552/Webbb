@@ -1,29 +1,49 @@
-﻿
-@model editdto
+﻿@model editdto
 @{
-    ViewData["Title"] = "update";
+    ViewData["Title"] = "Update Department";
 }
 
-<h1>update</h1>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0 rounded-lg">
+                <div class="card-body p-4">
+                    <div class="text-center mb-4">
+                        <h2 class="text-primary">Update Department</h2>
+                        <p class="text-muted">Edit department information</p>
+                    </div>
 
-<br></br>
-<form asp-action="update">
-    <div class="my-4">
-        <label asp-for="code">code</label>
-        <input asp-for="code " class="form-control"></input>
-        <span asp-validation-for="code" class="text-danger"></span>
+                    @Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })
 
-    </div>
-    <div>
-        <label asp-for="name">name</label>
-        <input asp-for="name "  class="form-control"></input>
-        <span asp-validation-for="name" class="text-danger"></span>
-    </div>
-    <div>
-        <label asp-for="createat">creation date</label>
-        <input asp-for="createat " class="form-control" ></input>
-        <span asp-validation-for="createat" class="text-danger"></span>
-    </div>
+                    <form asp-action="update" class="needs-validation" novalidate>
+                        <div class="form-floating mb-3">
+                            <input class="form-control" id="code" asp-for="code" placeholder="Code" required />
+                            <label for="code">Department Code</label>
+                            <span asp-validation-for="code" class="text-danger"></span>
+                        </div>
 
-    <input type="submit" value="save" class="btn btn-primary" />
-</form>
+                        <div class="form-floating mb-3">
+                            <input class="form-control" id="name" asp-for="name" placeholder="Name" required />
+                            <label for="name">Department Name</label>
+                            <span asp-validation-for="name" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <input class="form-control" id="createat" asp-for="createat" placeholder="Creation Date" required />
+                            <label for="createat">Creation Date</label>
+                            <span asp-validation-for="createat" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg">Save Changes</button>
+                        </div>
+
+                        <div class="text-center mt-3">
+                            <a asp-action="index" class="text-decoration-none">Back to Department List</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
