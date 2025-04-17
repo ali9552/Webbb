@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\20106\\Desktop\\website\\website.dal\\website.dal.csproj": {}
+    "C:\\Users\\20106\\Desktop\\Webbb\\website.dal\\website.dal.csproj": {}
   },
   "projects": {
-    "C:\\Users\\20106\\Desktop\\website\\website.dal\\website.dal.csproj": {
+    "C:\\Users\\20106\\Desktop\\Webbb\\website.dal\\website.dal.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\20106\\Desktop\\website\\website.dal\\website.dal.csproj",
+        "projectUniqueName": "C:\\Users\\20106\\Desktop\\Webbb\\website.dal\\website.dal.csproj",
         "projectName": "website.dal",
-        "projectPath": "C:\\Users\\20106\\Desktop\\website\\website.dal\\website.dal.csproj",
+        "projectPath": "C:\\Users\\20106\\Desktop\\Webbb\\website.dal\\website.dal.csproj",
         "packagesPath": "C:\\Users\\20106\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\20106\\Desktop\\website\\website.dal\\obj\\",
+        "outputPath": "C:\\Users\\20106\\Desktop\\Webbb\\website.dal\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
